@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+  .bg-mars {
+    background-image: url("https://www.fr.de/assets/images/36/444/36444080-der-rote-planet-mars-symbolbild-mea.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+</style>
+    <style>
+  .active-tab { background:#4ade80; border:2px solid #166534; font-weight:700; }
+  input[type="checkbox"]:checked + span { text-decoration: line-through; opacity:.7; }
+</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mars Habitat Dashboard</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-mars">
+  
+  <h1 class="text-6xl font-bold text-center mt-6 text-white">
+    Mars Habitat Dashboard
+  </h1>
+
+<header>
+    <h1 class="text-4xl mt-24 text-center text-bold  ">Olympus Mons Base</h1>
+    <button  id="override" class="mt-10 p-4 m-4 shadow rounded-full border border-slate-300 text-slate-700 hover:bg-slate-50 transition text-white">MANUAL OVERRIDE</button>
+</header>
+<main class="max-w-3xl mx auto p-6">
+    <!--Status Panel-->
+    <section class= "bg-white rounded-xl p-5 border">
+        <h2 class= "text 2xl font-bold">Vital Statistics</h2>
+
+        <!--O2-->
+        <div class="mt-6">
+            <div class= "flex items center">
+                <p class="font medium mt-2 font bold"> Oxygen levels 🫁 </p>
+                <span id="oxyval"class="font bold"> 85%</span>           
+            </div>
+            <div class="h-4 w-full bg-grey-200 rounded-full overflow-hidden mt-2">
+            <span id="oxyBar"class="block h-full bg-green-300" style="width: 85%"></span>
+            </div>
+        </div>
+        <!--Power-->
+        <div class="mt-6">
+            <div class= "flex items center">
+                <p class="font medium mt-2 font bold"> Power remaining ⚡️</p>
+                <span id="powval"class="font bold"> 65%</span>           
+            </div>
+            <div class="h-4 w-full bg-grey-200 rounded-full overflow-hidden mt-2">
+            <span id="powBar" class="block h-full bg-orange-300" style="width: 65%"></span>
+            </div>
+        </div>
+        <!--Water-->
+        <p class="mt-8">Water Recycling rate 💧
+            <span id="waterval"class="font bold mt-234" >90%</span>
+        </p>
+        <div class="h-4 w-full bg-grey-200 rounded-full overflow-hidden mt-2">
+            <span id="powBar" class="block h-full bg-blue-300" style="width: 90%"></span>
+        </div>
+    </section>
+</main>
+<!-- Emergency overlay (hidden by default) -->
+
+<h1 id="emergencyMsg" style="display:none" class="text-6xl mt-8 text-bold text-center ">EMERGENCY</h1>
+<script>
+  
+  const overrideBtn = document.getElementById("override");
+  const emergencyMsg = document.getElementById("emergencyMsg");
+
+  let emergency = false;
+
+  overrideBtn.addEventListener("click", () => {
+    emergency = !emergency; // toggle true/false
+
+    if (emergency) {
+      // Emergency ON → Red + Show alert
+      document.body.classList.remove("bg-mars");
+      document.body.classList.add("bg-red-600");
+      emergencyMsg.style.display = "block";
+    } else {
+      // Emergency OFF → Back to Mars background
+      document.body.classList.remove("bg-red-600");
+      document.body.classList.add("bg-mars");
+      emergencyMsg.style.display = "none";
+    }
+  });
+</script>
+
+ 
+<section class="bg-white p-4 rounded-xl mt-8 max-w-3xl mx-auto">
+  <h2 class="text-xl font-bold text-center mb-3">Crew Log</h2>
+  <!-- Name Input -->
+<div class="flex items-center justify-center gap-2 mb-3">
+  <input id="crewName" type="text" placeholder="Enter your name"
+         class="border rounded px-3 py-1 w-60">
+</div>
+  <!-- Tabs -->
+  <div class="flex justify-center gap-4 mt-4">
+    <button id="showActive" class="px-3 py-1 rounded bg-blue-200 active-tab">Active Missions</button>
+    <button id="showRest"   class="px-3 py-1 rounded bg-purple-200">Rest / Standby</button>
+  </div>
+  
+
+  <!-- Active (default visible) -->
+  <ul id="activeList" class="mt-2 space-y-2">
+    <li>
+      <label class="flex items-center gap-2">
+        <input type="checkbox">
+        <span>Collecting rock samples</span>
+      </label>
+    </li>
+    <li>
+      <label class="flex items-center gap-2">
+        <input type="checkbox">
+        <span>Checking solar panels</span>
+      </label>
+    </li>
+    <li>
+      <label class="flex items-center gap-2">
+        <input type="checkbox">
+        <span>Fixing air filter</span>
+      </label>
+    </li>
+  </ul>
+
+  <!-- Rest (starts hidden) -->
+  <ul id="restList" style="display:none;" class="mt-2 space-y-2">
+    <li>
+      <label class="flex items-center gap-2">
+        <input type="checkbox">
+        <span>Sleeping</span>
+      </label>
+    </li>
+    <li>
+      <label class="flex items-center gap-2">
+        <input type="checkbox">
+        <span>Lunch break</span>
+      </label>
+    </li>
+    <li>
+      <label class="flex items-center gap-2">
+        <input type="checkbox">
+        <span>Relaxing / hobbies</span>
+      </label>
+    </li>
+  </ul>
+  
+</section>
+
+<script>
+  const btnActive  = document.getElementById("showActive");
+  const btnRest    = document.getElementById("showRest");
+  const activeList = document.getElementById("activeList");
+  const restList   = document.getElementById("restList");
+
+  // if/else version 
+  btnActive.addEventListener("click", () => {
+    activeList.style.display = "block";
+    restList.style.display = "none";
+    btnActive.classList.add("active-tab");
+    btnRest.classList.remove("active-tab");
+  });
+
+  btnRest.addEventListener("click", () => {
+    activeList.style.display = "none";
+    restList.style.display = "block";
+    btnRest.classList.add("active-tab");
+    btnActive.classList.remove("active-tab");
+  });
+  // --- Add name to current list ---
+const nameInput = document.getElementById("crewName");
+const addBtn = document.getElementById("addEntry");
+
+addBtn.addEventListener("click", () => {
+  const name = nameInput.value.trim();
+  if (!name) return; // ignore empty
+
+  const li = document.createElement("li");
+  li.innerHTML = `
+    <label class="flex items-center gap-2">
+      <input type="checkbox">
+      <span>${name}</span>
+    </label>
+  `;
+
+  const activeIsVisible = activeList.style.display !== "none";
+  (activeIsVisible ? activeList : restList).appendChild(li);
+
+  nameInput.value = "";
+  nameInput.focus();
+});
+
+</script>
+<script>
+  function fluctuate(idVal, idBar) {
+    const valEl = document.getElementById(idVal);
+    const barEl = document.getElementById(idBar);
+
+    let current = parseInt(valEl.textContent); // read number
+    const change = Math.floor(Math.random() * 5) - 2; // random -2 to +2
+    let updated = current + change;
+
+    // keep in safe range
+    if (updated > 100) updated = 100;
+    if (updated < 0) updated = 0;
+
+    valEl.textContent = updated + "%";
+    barEl.style.width = updated + "%";
+  }
+
+  // every 3 seconds update all three
+  setInterval(() => {
+    fluctuate("oxyval", "oxyBar");
+    fluctuate("powval", "powBar");
+    fluctuate("waterval", "waterBar");
+  }, 3000);
+</script>
+
+</body>
+</html>

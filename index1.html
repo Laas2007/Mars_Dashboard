@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mars Habitat Dashboard</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-green-100">
+  
+  <h1 class="text-6xl font-bold text-center mt-6">
+    Mars Habitat Dashboard
+  </h1>
+
+<header>
+    <h1 class="text-3xl mt-8  text-center">Olympus Mons Base</h1>
+    <button  id="override" class="mt-10 p-4 m-4 shadow rounded-full border border-slate-300 text-slate-700 hover:bg-slate-50 transition px-20 py-20">MANUAL OVERRIDE</button>
+</header>
+<main class="max-w-3xl mx auto p-6">
+    <!--Status Panel-->
+    <section class= "bg-white rounded-xl p-5 border">
+        <h2 class= "text 2xl font-bold">Vital Statistics</h2>
+
+        <!--O2-->
+        <div class="mt-6">
+            <div class= "flex items center">
+                <p class="font medium mt-2 font bold"> Oxygen levels 🫁 </p>
+                <span id="oxyval"class="font bold"> 85%</span>           
+            </div>
+            <div class="h-4 w-full bg-grey-200 rounded-full overflow-hidden mt-2">
+            <span id="oxyBar"class="block h-full bg-green-300" style="width: 85%"></span>
+            </div>
+        </div>
+        <!--Power-->
+        <div class="mt-6">
+            <div class= "flex items center">
+                <p class="font medium mt-2 font bold"> Power remaining ⚡️</p>
+                <span id="powval"class="font bold"> 65%</span>           
+            </div>
+            <div class="h-4 w-full bg-grey-200 rounded-full overflow-hidden mt-2">
+            <span id="powBar" class="block h-full bg-orange-300" style="width: 65%"></span>
+            </div>
+        </div>
+        <!--Water-->
+        <p class="mt-8">Water Recycling rate 💧
+            <span id="waterval"class="font bold mt-234" >90%</span>
+        </p>
+        <div class="h-4 w-full bg-grey-200 rounded-full overflow-hidden mt-2">
+            <span id="powBar" class="block h-full bg-blue-300" style="width: 90%"></span>
+        </div>
+    </section>
+</main>
+<!-- Emergency overlay (hidden by default) -->
+
+<h1 id="emergencyMsg" style="display:none" class="text-6xl mt-8 text-bold text-center ">EMERGENCY</h1>
+<script>
+  const btn = document.getElementById("override");
+  const msg = document.getElementById("emergencyMsg");
+
+  btn.addEventListener("click", () => {
+    if (msg.style.display === "none") {
+      msg.style.display = "block";
+      document.body.classList.remove("bg-green-100")
+      document.body.classList.add("bg-red-600")
+    } else {
+      msg.style.display = "none";
+      document.body.classList.remove("bg-red-600")
+      document.body.classList.add("bg-green-100")
+    }
+  });
+ 
+</script>
+ 
+<section>
+    <h2 class="text-bold text-2xl text-center">Crew Log</h2>
+    <div class="flex justify-center items-center mt-6 gap-4">
+  <label for="crewName" class="text-lg font-semibold">Crew Name:</label>
+  <input
+    type="text"
+    id="crewName"
+    placeholder="Enter crew member name"
+    class="px-4 py-2 border rounded w-64"
+  />
+</div>
+ 
+    
+    <div class="flex justify-center gap-4 mt-4">
+      <select id="crewStatus" class="text-center px-4 py-2 border rounded">
+        <option value="all">All</option>
+        <option value="active">Active Missions</option>
+        <option value="rest">Rest/Standby</option>
+     </select>
+      </div>
+      <!-- Crew Log Input -->
+
+
+
+    <!-- Dynamic Options Container -->
+<div id="missionOptions" class="flex justify-center mt-4 hidden">
+  <select class="text-center px-4 py-2 border rounded">
+    <option value="">Select a Mission</option>
+    <option value="apollo">Apollo</option>
+    <option value="voyager">Voyager</option>
+    <option value="hubble">Hubble</option>
+  </select>
+</div>
+<!-- Checkbox Options -->
+<div id="missionCheckboxes" class="flex flex-col items-center mt-4 hidden">
+  <label class="flex items-center gap-2">
+    <input type="checkbox" value="apollo" class="form-checkbox"> Apollo
+  </label>
+  <label class="flex items-center gap-2 mt-2">
+    <input type="checkbox" value="voyager" class="form-checkbox"> Voyager
+  </label>
+  <label class="flex items-center gap-2 mt-2">
+    <input type="checkbox" value="hubble" class="form-checkbox"> Hubble
+  </label>
+</div>
+
+<!-- Script -->
+<script>
+  const crewStatus = document.getElementById("crewStatus");
+  const missionCheckboxes = document.getElementById("missionCheckboxes");
+
+  crewStatus.addEventListener("change", function () {
+    if (this.value === "active") {
+      missionCheckboxes.classList.remove("hidden");
+    } else {
+      missionCheckboxes.classList.add("hidden");
+    }
+  });
+
+crewStatus.addEventListener("change", function () {
+  const value = crewStatus.value; // active, rest, or all
+
+  if (value === "active") {
+    missionCheckboxes.classList.remove("hidden");
+    restCheckboxes.classList.add("hidden");
+  } 
+  else if (value === "rest") {
+    restCheckboxes.classList.remove("hidden");
+    missionCheckboxes.classList.add("hidden");
+  } 
+  else { // value === "all"
+    missionCheckboxes.classList.remove("hidden");
+    restCheckboxes.classList.remove("hidden");
+  }
+});
+</script>
+<!-- Active Missions Checkboxes -->
+<div id="missionCheckboxes" class="flex flex-col items-center mt-4 hidden">
+  <label class="flex items-center gap-2">
+    <input type="checkbox" value="apollo" class="form-checkbox"> Apollo
+  </label>
+  <label class="flex items-center gap-2 mt-2">
+    <input type="checkbox" value="voyager" class="form-checkbox"> Voyager
+  </label>
+  <label class="flex items-center gap-2 mt-2">
+    <input type="checkbox" value="hubble" class="form-checkbox"> Hubble
+  </label>
+</div>
+
+<!-- Rest/Standby Checkboxes -->
+<div id="restCheckboxes" class="flex flex-col items-center mt-4 hidden">
+  <label class="flex items-center gap-2">
+    <input type="checkbox" value="lunch" class="form-checkbox"> Lunch Break
+  </label>
+  <label class="flex items-center gap-2 mt-2">
+    <input type="checkbox" value="sleep" class="form-checkbox"> Sleeping
+  </label>
+  <label class="flex items-center gap-2 mt-2">
+    <input type="checkbox" value="relax" class="form-checkbox"> Relaxation
+  </label>
+</div>
+
+
+<script>
+  const crewStatus = document.getElementById("crewStatus");
+  const missionCheckboxes = document.getElementById("missionCheckboxes");
+  const restCheckboxes = document.getElementById("restCheckboxes");
+
+  crewStatus.addEventListener("change", function () {
+    if (this.value === "active") {
+      missionCheckboxes.classList.remove("hidden");
+      restCheckboxes.classList.add("hidden");
+    } else if (this.value === "rest") {
+      restCheckboxes.classList.remove("hidden");
+      missionCheckboxes.classList.add("hidden");
+    } else {
+      missionCheckboxes.classList.add("hidden");
+      restCheckboxes.classList.add("hidden");
+    }
+  });
+</script>
+
+
+
+
+
+
+
+   
+
+</section>
+<script>
+  const btnActive = document.getElementById("showActive");
+  const btnRest = document.getElementById("showRest");
+  const activeList = document.getElementById("activelist");
+  const restList = document.getElementById("restlist");
+
+  // When Active Missions button is clicked
+  btnActive.addEventListener("click", () => {
+    activeList.style.display = "block";   // show active
+    restList.style.display = "none";      // hide rest
+  });
+
+  // When Rest/Standby button is clicked
+  btnRest.addEventListener("click", () => {
+    activeList.style.display = "none";    // hide active
+    restList.style.display = "block";     // show rest
+  });
+</script>
+</body>
+</html
